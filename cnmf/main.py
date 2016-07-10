@@ -1,3 +1,14 @@
+from numpy import clip, inf, percentile, asarray, where, size, prod, unique, bincount
+from scipy.ndimage import median_filter
+from sklearn.decomposition import NMF as SKNMF
+from skimage.measure import label
+from skimage.morphology import remove_small_objects
+import itertools
+
+from regional import one, many
+from ..utils import check_images
+from ..model import ExtractionModel
+
 class CNMF(object):
   """
   Source extraction using constrained non-negative matrix factorization.
