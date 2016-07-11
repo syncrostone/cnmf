@@ -12,7 +12,7 @@ install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda info -a
-  - conda create --yes -q -n test python=$TRAVIS_PYTHON_VERSION pip numpy scipy #scikit-learn scikit-image pytest
+  - conda create --yes -q -n test python=$TRAVIS_PYTHON_VERSION pip numpy scipy cvxpy #scikit-learn scikit-image pytest
   - source activate test
   - pip install -r requirements.txt
   - pip install -r requirements-dev.txt
