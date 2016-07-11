@@ -94,6 +94,44 @@ def CNMFSetParms(Y, n_processes, K=30, gSig=[5, 5], ssub=1, tsub=1, p=2, p_ssub=
 
 #%%
 
+def update_order(A):
+    '''Determines the update order of the temporal components given the spatial
+    components by creating a nest of random approximate vertex covers
+     Input:
+     -------
+     A:    np.ndarray
+          matrix of spatial components (d x K)
+
+     Outputs:
+     ---------
+     O:   list of sets
+          list of subsets of components. The components of each subset can be updated in parallel
+     lo:  list
+          length of each subset
+
+    Written by Eftychios A. Pnevmatikakis, Simons Foundation, 2015
+    '''
+    K = np.shape(A)[-1]
+    AA = A.T * A
+    AA.setdiag(0)
+    F = (AA) > 0
+    F = F.toarray()
+    rem_ind = np.arange(K)
+    O = []
+    lo = []
+    while len(rem_ind) > 0:
+        L = np.sort(app_vertex_cover(F[rem_ind, :][:, rem_ind]))
+        if L.size:
+            ord_ind = set(rem_ind) - set(rem_ind[L])
+            rem_ind = rem_ind[L]
+        else:
+            ord_ind = set(rem_ind)
+            rem_ind = []
+
+        O.append(ord_ind)
+        lo.append(len(ord_ind))
+
+    return O[::-1], lo[::-1]
 
 def local_correlations(Y, eight_neighbours=True, swap_dim=True):
     """Computes the correlation image for the input dataset Y
