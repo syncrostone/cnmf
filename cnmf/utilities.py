@@ -245,5 +245,27 @@ def order_components(A, C):
     return A_or, C_or, srt
 
 
+def app_vertex_cover(A):
+    ''' Finds an approximate vertex cover for a symmetric graph with adjacency matrix A.
 
+     Parameters
+     -----------
+     A:    boolean 2d array (K x K)
+          Adjacency matrix. A is boolean with diagonal set to 0
+
+     Returns
+     --------
+     L:   A vertex cover of A
+     Written by Eftychios A. Pnevmatikakis, Simons Foundation, 2015
+    '''
+
+    L = []
+    while A.any():
+        nz = np.nonzero(A)[0]          # find non-zero edges
+        u = nz[np.random.randint(0, len(nz))]
+        A[u, :] = False
+        A[:, u] = False
+        L.append(u)
+
+    return np.asarray(L)
 

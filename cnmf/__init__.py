@@ -1,7 +1,1 @@
-from main import fit
-from utilities import local_correlations, CNMF_SetParms, order_components
-from pre_processing import preprocess_data
-from initilization import initialize_components
-from merging import merge_components
-from spatial import update_spatial_components
-from temporal import update_temporal_components
+from main import CNMF
