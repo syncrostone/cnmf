@@ -1,5 +1,10 @@
 
 ## fit a model
-from cnmf import fit
+import thunder as td
+from cnmf import CNMF
 
-model=CNMF.fit(data, chunksize=[50,25], padding=[25,25])
+data = td.images.fromtif('').toarray()
+
+algorithm = CNMF(params)
+
+model = algorithms.fit(data)
