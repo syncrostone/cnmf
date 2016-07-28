@@ -41,7 +41,7 @@ class CNMF(object):
   	Yr = np.transpose(images, range(1, len(dims) + 1) + [0])
 	Yr = np.reshape(Yr, (np.prod(dims), T), order='F')
 	Y=np.reshape(Yr,dims+(T,),order='F')
-	options = CNMFSetParms(Y,p=self.p,gSig=self.gSig,K=self.k, backend=self.backend, n_processes=self.n_processes)
+	options = CNMFSetParms(Y,p=self.p,gSig=self.gSig,K=self.k, backend=self.backend, thr=self.merge_thresh, n_processes=self.n_processes)
 
 	Cn = local_correlations(Y)
 	Yr,sn = preprocess_data(Yr,**options['preprocess_params'])
@@ -50,7 +50,7 @@ class CNMF(object):
 	A,b,Cin = update_spatial_components(Yr, Cin, f_in, Ain, sn=sn, **options['spatial_params'])  
 	options['temporal_params']['p'] = 0 # set this to zero for fast updating without deconvolution
 	C,f,S,bl,c1,neurons_sn,g,YrA = update_temporal_components(Yr,A,b,Cin,f_in,bl=None,c1=None,sn=None,g=None,**options['temporal_params'])
-	A_m,C_m,nr_m,merged_ROIs,S_m,bl_m,c1_m,sn_m,g_m=merge_components(Yr,A,b,C,f,S,sn,options['temporal_params'],options['spatial_params'], bl=bl, c1=c1, sn=neurons_sn, g=g, thr=0.8, mx=50, fast_merge = True)
+	A_m,C_m,nr_m,merged_ROIs,S_m,bl_m,c1_m,sn_m,g_m=merge_components(Yr,A,b,C,f,S,sn,options['temporal_params'],options['spatial_params'], options['merging'],bl=bl, c1=c1, sn=neurons_sn, g=g, mx=50, fast_merge = True)
 	A2,b2,C2 = update_spatial_components(Yr, C_m, f, A_m, sn=sn, **options['spatial_params'])
 	options['temporal_params']['p'] = self.p # set it back to original value to perform full deconvolution
 	C2,f2,S2,bl2,c12,neurons_sn2,g21,YrA = update_temporal_components(Yr,A2,b2,C2,f,bl=None,c1=None,sn=None,g=None,**options['temporal_params'])
